@@ -64,6 +64,8 @@
 pub use glfw;
 /// Use the reexported imgui crate to avoid version conflicts.
 pub use imgui;
+/// Re-export opengl renderer
+pub use imgui_opengl_renderer::Renderer as OpenglRenderer;
 
 use glfw::ffi::GLFWwindow;
 use glfw::{Action, Key, Modifiers, MouseButton, StandardCursor, Window, WindowEvent};
