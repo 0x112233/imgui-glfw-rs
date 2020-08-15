@@ -190,6 +190,21 @@ impl ImguiGLFW {
         imgui.frame()
     }
 
+    pub fn sized_frame<'a>(&mut self, window: &mut Window, imgui: &'a mut Context, display_size: (f32, f32)) -> imgui::Ui<'a> {
+        let io = imgui.io_mut();
+
+        let now = Instant::now();
+        let delta = now - self.last_frame;
+        let delta_s = delta.as_secs() as f32 + delta.subsec_nanos() as f32 / 1_000_000_000.0;
+        self.last_frame = now;
+        io.delta_time = delta_s;
+
+        let window_size = window.get_size();
+        io.display_size = [display_size.0, display_size.1];
+
+        imgui.frame()
+    }
+
     pub fn draw<'ui>(&mut self, ui: Ui<'ui>, window: &mut Window) {
         let io = ui.io();
         if !io
