@@ -142,7 +142,7 @@ impl ImguiGLFW {
         }
     }
 
-    pub fn handle_event(&mut self, imgui: &mut Context, event: &WindowEvent) {
+    pub fn handle_event(&mut self, imgui: &mut Context, event: &WindowEvent, display_size_factor: (f32, f32)) {
         match *event {
             WindowEvent::MouseButton(mouse_btn, action, _) => {
                 let index = match mouse_btn {
@@ -158,6 +158,8 @@ impl ImguiGLFW {
                 imgui.io_mut().mouse_down = self.mouse_press;
             }
             WindowEvent::CursorPos(w, h) => {
+                let w = w * display_size_factor.0 as f64;
+                let h = h * display_size_factor.1 as f64;
                 imgui.io_mut().mouse_pos = [w as f32, h as f32];
                 self.cursor_pos = (w, h);
             }
@@ -190,7 +192,7 @@ impl ImguiGLFW {
         imgui.frame()
     }
 
-    pub fn sized_frame<'a>(&mut self, window: &mut Window, imgui: &'a mut Context, display_size: (f32, f32)) -> imgui::Ui<'a> {
+    pub fn sized_frame<'a>(&mut self, imgui: &'a mut Context, display_size: (f32, f32)) -> imgui::Ui<'a> {
         let io = imgui.io_mut();
 
         let now = Instant::now();
@@ -199,7 +201,6 @@ impl ImguiGLFW {
         self.last_frame = now;
         io.delta_time = delta_s;
 
-        let window_size = window.get_size();
         io.display_size = [display_size.0, display_size.1];
 
         imgui.frame()
